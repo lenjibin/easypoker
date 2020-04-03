@@ -10,10 +10,13 @@ game_state = {
     "cards": ['AC', 'AD', 'AS', 'AH', '2C', '2D', '2S', '2H', '3C', '3D', '3S', '3H', '4C', '4D', '4S', '4H', '5C', '5D', '5S', '5H', '6C', '6D', '6S', '6H', '7C', '7D', '7S', '7H', '8C', '8D', '8S', '8H', '9C', '9D', '9S', '9H', '10C', '10D', '10S', '10H', 'JC', 'JD', 'JS', 'JH', 'QC', 'QD', 'QS', 'QH', 'KC', 'KD', 'KS', 'KH'],
 }
 
-# a simple page that says hello
 @app.route('/')
 def hello():
-    return render_template('hello.html', game_state=game_state)
+    return render_template('game.html')
+
+@app.route('/get_game_state', methods=['POST'])
+def get_game_data():
+    return json.dumps(game_state)
 
 @app.route('/add_player/<username>')
 def add_player(username):
