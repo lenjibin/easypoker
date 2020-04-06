@@ -12,7 +12,7 @@ function game_rerender(game_state) {
     $('#content').append(player);
     $('#content').append("<br>");
     if (game_state.hands[player]) {
-      player_hand = game_state.hands[player].length !== 0 ? JSON.parse(game_state.hands[player]) : [];
+      player_hand = game_state.hands[player];
       for (var j = 0; j < player_hand.length; j++) {
         $('#content').append('<img src=' + card_path(player_hand[j]) + ' style="height: 200" />');
       }

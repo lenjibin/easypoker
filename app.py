@@ -36,7 +36,8 @@ def index():
 @app.route('/shuffle')
 def shuffle():
     game_state["cards"] = ['AC', 'AD', 'AS', 'AH', '2C', '2D', '2S', '2H', '3C', '3D', '3S', '3H', '4C', '4D', '4S', '4H', '5C', '5D', '5S', '5H', '6C', '6D', '6S', '6H', '7C', '7D', '7S', '7H', '8C', '8D', '8S', '8H', '9C', '9D', '9S', '9H', '10C', '10D', '10S', '10H', 'JC', 'JD', 'JS', 'JH', 'QC', 'QD', 'QS', 'QH', 'KC', 'KD', 'KS', 'KH']
-    game_state["hands"] = {}
+    for player in game_state["hands"]:
+        game_state["hands"][player] = []
     return "cards reset"
 
 @app.route('/reset_everything')
@@ -80,20 +81,23 @@ def give_money(username, amount):
 def deal():
     players_dealt_to = []
     for player in game_state["players"]:
-        cards = get_random_card(2)
+        cards = get_random_cards(2)
         game_state["hands"][player] = cards
         players_dealt_to.append(player)
     return "dealt cards to " + str(players_dealt_to)
 
-@app.route('/draw_card', methods=['POST'])
-@app.route('/draw_card/<num_cards>', methods=['POST'])
-def get_random_card(num_cards=1):
+def get_random_cards(num_cards):
     chosen_cards = []
     for i in range(int(num_cards)):
         chosen_card = random.choice(game_state["cards"])
         chosen_cards.append(chosen_card)
         game_state["cards"].remove(chosen_card)
-    return json.dumps(chosen_cards)
+    return chosen_cards
+
+@app.route('/draw_card', methods=['POST'])
+@app.route('/draw_card/<num_cards>', methods=['POST'])
+def get_random_cards_http(num_cards=1):
+    return json.dumps(get_random_cards(num_card))
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
